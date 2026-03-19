@@ -1,0 +1,616 @@
+    <!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEARN UP | Bilim Olami & Admin Panel</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="web.css">
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="loader-ring"></div>
+        <h3 style="font-weight: 600; color: var(--text-muted);">Yuklanmoqda...</h3>
+    </div>
+
+    <!-- TOASTS -->
+    <div id="toast-container"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo" onclick="goHome()">
+                    <i class="fa-solid fa-shapes"></i> LEARN UP
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a onclick="goHome()" class="active">Bosh sahifa</a></li>
+                    <li><a href="#features">Afzalliklar</a></li>
+                    <li><a href="#courses">Kurslar</a></li>
+                    <li><a href="#faq">Savollar</a></li>
+                    <li><a href="#contact">Aloqa</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button id="authBtn" class="btn btn-primary" onclick="openModal('loginModal')">Kirish</button>
+                    <div id="userProfile" class="user-profile" onclick="handleProfileClick()">
+                        <div class="avatar" id="navAvatar">A</div>
+                        <div class="user-info">
+                            <span class="user-name" id="navUsername">User</span>
+                            <span class="user-role" id="navUserRole">Talaba</span>
+                        </div>
+                    </div>
+                    <div class="mobile-toggle"><i class="fa-solid fa-bars"></i></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero" class="hero">
+            <div class="container hero-container">
+                <div class="hero-text">
+                    <span class="badge badge-new" style="margin-bottom: 20px; display: inline-block;">🚀 Kelajakka yo'l ochuvchi platforma</span>
+                    <h1>Kelajakingizni <br><span class="text-gradient">LEARN UP</span> quring</h1>
+                    <p>Zamonaviy kasblarni o'rganing, amaliy loyihalar bilan shug'ullaning va daromadli karyerani boshlang. Sizga yordam berishga tayyormiz!</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="document.getElementById('courses').scrollIntoView()">
+                            <i class="fa-solid fa-rocket"></i> Kurslarni boshlash
+                        </button>
+                        <button id="heroRegisterBtn" class="btn btn-outline" onclick="openModal('registerModal')">
+                            <i class="fa-regular fa-user"></i> Ro'yxatdan o'tish
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <h3>15k+</h3>
+                            <span>O'quvchilar</span>
+                        </div>
+                        <div class="stat-item">
+                            <h3>120+</h3>
+                            <span>Kurslar</span>
+                        </div>
+                        <div class="stat-item">
+                            <h3>4.9</h3>
+                            <span>Reyting</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-img-box">
+                    <img src="learnup.png" alt="Students" class="hero-img">
+                    <div class="floating-card fc-1">
+                        <div class="card-icon"><i class="fa-solid fa-check"></i></div>
+                        <div><h4 style="font-size: 14px;">Muvaffaqiyat</h4><span style="font-size: 12px; color: #555;">Kurs tugatildi</span></div>
+                    </div>
+                    <div class="floating-card fc-2">
+                        <div class="card-icon" style="color: var(--primary); background: #eff6ff;"><i class="fa-solid fa-video"></i></div>
+                        <div><h4 style="font-size: 14px;">50+ Video</h4><span style="font-size: 12px; color: #555;">Darsliklar</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLAYER -->
+        <section id="course-player" class="container section-padding">
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-outline" onclick="goBackFromPlayer()"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+            </div>
+            <div class="player-layout">
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <i class="fa-solid fa-play-circle play-btn-large"></i>
+                        <h3 id="player-title" style="margin-top: 15px;">Dars nomi</h3>
+                    </div>
+                    <div class="lesson-info">
+                        <h2 id="player-lesson-title" style="margin-bottom: 10px;">Introduction</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;" id="player-lesson-desc">Bu darsda asosiy tushunchalarni o'rganamiz.</p>
+                        <div class="progress-container">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="font-size: 13px; font-weight: 600;">Kurs progressi</span>
+                                <span style="font-size: 13px; font-weight: 600; color: var(--primary);" id="player-progress-text">0%</span>
+                            </div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" id="player-progress-bar"></div></div>
+                        </div>
+                        <div class="lesson-nav">
+                            <button class="btn btn-outline" id="prevLessonBtn" onclick="prevLesson()" disabled>Oldingi</button>
+                            <button class="btn btn-primary" id="completeBtn" onclick="markLessonComplete()"><i class="fa-solid fa-check"></i> Darsni tugatish</button>
+                            <button class="btn btn-outline" id="nextLessonBtn" onclick="nextLesson()">Keyingi</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lesson-sidebar">
+                    <div class="ls-header">
+                        <h4 style="margin-bottom: 5px;" id="sidebar-course-title">Kurs Nomi</h4>
+                        <span style="font-size: 12px; color: var(--text-muted);" id="sidebar-lesson-count">0 dars</span>
+                    </div>
+                    <div class="lesson-list" id="lesson-list-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEST -->
+        <section id="test-section" class="container section-padding">
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-outline" onclick="goBackFromTest()"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+            </div>
+            <div class="test-card">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: var(--primary); margin-bottom: 10px;">Yakuniy Imtihon</h2>
+                    <p style="color: var(--text-muted);">Kursni muvaffaqiyatli tugatish uchun testdan o'ting. <br>O'tish balli: 70%</p>
+                </div>
+                <form id="test-form" onsubmit="submitTest(event)">
+                    <div id="test-questions-container"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 20px;">Testni topshirish</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- CERTIFICATE VIEW -->
+        <section id="certificate-section" class="container section-padding">
+            <div style="margin-bottom: 30px; text-align: center;">
+                <button class="btn btn-outline" onclick="showCertificatesList()"><i class="fa-solid fa-list"></i> Sertifikatlarim</button>
+                <br><br>
+                <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Sertifikatni chop etish</button>
+            </div>
+            <div class="certificate-wrapper" id="certificate-view">
+                <div class="cert-header">SERTIFIKAT</div>
+                <div class="cert-body">
+                    <p class="cert-title">Ushbu sertifikat bilan tasdiqlanadiki</p>
+                    <div class="cert-name" id="cert-user-name">Sulaymon</div>
+                    <p class="cert-title">muvaffaqiyatli tamomladi</p>
+                    <div class="cert-course" id="cert-course-title" style="font-weight: bold; margin-top: 10px;">Ingiliz tili To'liq Kurs</div>
+                    <p style="margin-top: 20px; color: var(--text-muted);">Barcha modullarni o'zlashtirdi va yakuniy imtihondan o'tdi.</p>
+                </div>
+                <div class="cert-footer">
+                    <div class="cert-seal">LEARN<br>UP</div>
+                    <div class="cert-signature">
+                        <div class="sign-line"></div>
+                        <p class="sign-name">Axmedov Sulaymon Allayor o'g'li</p>
+                        <p style="font-size: 12px; color: var(--text-muted);">Direktor</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATES LIST -->
+        <section id="certificates-list-section" class="container section-padding">
+            <div class="dash-layout" style="grid-template-columns: 1fr;">
+                <div class="dash-content">
+                    <div class="dash-header">
+                        <h2>Sertifikatlarim</h2>
+                        <button class="btn btn-outline" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+                    </div>
+                    <div id="certificates-grid" class="certificates-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL -->
+        <section id="admin-panel" class="container section-padding">
+            <div class="admin-layout">
+                <aside class="admin-sidebar">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Admin Panel</h3>
+                    <ul class="admin-menu">
+                        <li><a onclick="showAdminSection('dashboard')" id="admin-menu-dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Boshqaruv</a></li>
+                        <li><a onclick="showAdminSection('courses')" id="admin-menu-courses"><i class="fa-solid fa-layer-group"></i> Kurslar</a></li>
+                        <li><a onclick="logout()" style="color: #ffcccc;"><i class="fa-solid fa-right-from-bracket"></i> Chiqish</a></li>
+                    </ul>
+                </aside>
+                
+                <div class="admin-content">
+                    <div id="admin-view-dashboard">
+                        <div class="dash-header">
+                            <h2>Assalomu alaykum, Admin!</h2>
+                            <button class="btn btn-outline" onclick="goHome()"><i class="fa-solid fa-globe"></i> Saytga o'tish</button>
+                        </div>
+                        
+                        <div class="admin-stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: var(--primary);"><i class="fa-solid fa-book-open"></i></div>
+                                <div class="stat-info">
+                                    <h4 id="admin-total-courses">0</h4>
+                                    <p>Jami kurslar</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: var(--secondary);"><i class="fa-solid fa-users"></i></div>
+                                <div class="stat-info">
+                                    <h4 id="admin-total-students">0</h4>
+                                    <p>O'quvchilar</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: var(--accent);"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <div class="stat-info">
+                                    <h4 id="admin-total-cert">0</h4>
+                                    <p>Berilgan sertifikatlar</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Oxirgi qo'shilgan kurslar</h3>
+                        <div class="data-table-wrapper" style="margin-top: 20px;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kurs</th>
+                                        <th>Kategoriya</th>
+                                        <th>Narxi</th>
+                                        <th>Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-recent-courses-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-view-courses" style="display: none;">
+                        <div class="dash-header">
+                            <h2>Barcha kurslar</h2>
+                            <button class="btn btn-primary" onclick="toggleAddCourseForm()"><i class="fa-solid fa-plus"></i> Yangi kurs</button>
+                        </div>
+
+                        <div id="add-course-form" class="add-course-form">
+                            <h4 style="margin-bottom: 20px;">Yangi kurs yaratish</h4>
+                            <form onsubmit="handleAddCourse(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <input type="text" id="newCourseTitle" placeholder=" " required>
+                                        <label>Kurs nomi</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" id="newCourseCat" placeholder=" " required>
+                                        <label>Kategoriya</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <input type="text" id="newCoursePrice" placeholder=" " required>
+                                        <label>Narx (masalan: 100,000 so'm)</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="url" id="newCourseImg" placeholder=" " required>
+                                        <label>Rasm URL</label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <button type="button" class="btn btn-outline" onclick="toggleAddCourseForm()">Bekor qilish</button>
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rasm</th>
+                                        <th>Nomi</th>
+                                        <th>Kategoriya</th>
+                                        <th>Narxi</th>
+                                        <th>Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-all-courses-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USER DASHBOARD -->
+        <section id="dashboard" class="container section-padding">
+            <div class="dash-layout">
+                <aside class="dash-sidebar">
+                    <div style="text-align: center; margin-bottom: 30px; position: relative;">
+                        <!-- Avatar rasmi -->
+                        <div class="avatar" id="dashAvatar" style="width: 80px; height: 80px; font-size: 30px; margin: 0 auto 15px;">A</div>
+                        <h3 id="dashName">Azamatbek</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;" id="dashEmail">user@example.com</p>
+                        <button class="btn btn-sm btn-outline" style="margin-top: 10px;" onclick="openModal('editProfileModal')">
+                            <i class="fa-solid fa-pen-to-square"></i> Tahrirlash
+                        </button>
+                    </div>
+                    <ul class="dash-menu">
+                        <li><a onclick="showDashboardMain()"><i class="fa-solid fa-gauge"></i> Boshqaruv paneli</a></li>
+                        <li><a onclick="showCertificatesList()"><i class="fa-solid fa-certificate"></i> Sertifikatlar</a></li>
+                        <li><a href="#" onclick="openModal('changePasswordModal')"><i class="fa-solid fa-key"></i> Parolni o'zgartirish</a></li>
+                        <li><a onclick="logout()" style="color: #ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Chiqish</a></li>
+                    </ul>
+                </aside>
+                <div class="dash-content">
+                    <div class="dash-header">
+                        <h2>Salom, <span id="dashNameSmall">Do'stim</span>! 👋</h2>
+                        <button class="btn btn-outline" onclick="goHome()"><i class="fa-solid fa-arrow-left"></i> Asosiy sahifa</button>
+                    </div>
+                    <h3 style="margin-bottom: 20px;">Davom etayotgan kurslar</h3>
+                    <div id="active-courses-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="features" class="section-padding" style="background: var(--bg-card);">
+            <div class="container">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto 60px;">
+                    <span class="badge badge-new">NIMA UCHUN BIZ?</span>
+                    <h2 style="font-size: 36px; margin-top: 15px;">Siz uchun eng yaxshi sharoitlar</h2>
+                    <p style="color: var(--text-muted); margin-top: 15px;">Biz nafaqat ma'lumot beramiz, balki amaliyot qildiramiz.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="f-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <h3>Tajribali ustozlar</h3>
+                        <p style="color: var(--text-muted); margin-top: 15px;">O'z sohasida yutuqqa erishgan mutaxassislar dars beradi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="f-icon"><i class="fa-solid fa-clock"></i></div>
+                        <h3>Bo'sh vaqtingizda</h3>
+                        <p style="color: var(--text-muted); margin-top: 15px;">Darslarni istalgan vaqtda, istalgan joydan ko'ring.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="f-icon"><i class="fa-solid fa-certificate"></i></div>
+                        <h3>Sertifikatlar</h3>
+                        <p style="color: var(--text-muted); margin-top: 15px;">Kursni tugatgach, xalqaro darajadagi sertifikat oling.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COURSES -->
+        <section id="courses" class="section-padding">
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 50px;">
+                    <div>
+                        <span class="badge badge-new">O'QISHNI BOSHLANG</span>
+                        <h2 style="font-size: 36px; margin-top: 15px;">Mashhur Kurslar</h2>
+                    </div>
+                </div>
+                <div class="course-grid" id="courses-grid"></div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq" class="section-padding" style="background: var(--bg-card);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 50px;">
+                    <span class="badge badge-new">YORDAM</span>
+                    <h2 style="font-size: 36px; margin-top: 15px;">Ko'p beriladigan savollar</h2>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Sizga kerakli javoblarni shu yerdan topishingiz mumkin</p>
+                </div>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Platformadan foydalanish bepulmi?
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer"><p>Platformadagi ko'plab asosiy kurslar bepul. Biroq ba'zi chuqur ixtisoslash va professional kurslar pullik bo'lishi mumkin. Siz ro'yxatdan o'tib, bepul kurslarni darhol boshlashingiz mumkin.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Sertifikat olish shartmi?
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer"><p>Yo'q, majburiy emas. Lekin kursni tugatib, imtihondan o'tganingizdan so'ng sizga rasmiy sertifikat beriladi. Bu sertifikat ish topishingizda katta yordam beradi.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Darslarni qayta ko'rish mumkinmi?
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer"><p>Albatta. Siz kursni sotib olganingizdan yoki bepul kursga yozilganingizdan so'ng, darslarni istalgan vaqtda va cheklanmagan miqdorda ko'rishingiz mumkin.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            To'lovni qanday qilish mumkin?
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer"><p>Siz "Click", "Payme" va "Uzum" kabi qulay to'lov tizimlari orqali, shuningdek bank kartalari orqali xavfsiz to'lovni amalga oshirishingiz mumkin.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section-padding" style="background: var(--bg-body);">
+            <div class="container">
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <div>
+                            <h2>Biz bilan bog'laning</h2>
+                            <p style="margin-top: 15px; opacity: 0.9;">Savollaringiz bormi? Biz har doim yordam berishga tayyormiz.</p>
+                        </div>
+                        <div style="margin-top: 40px;">
+                            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>+998 94 850 11 28</span>
+                            </div>
+                            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span>info@ilmbilan.uz</span>
+                            </div>
+                            <div style="display: flex; gap: 15px; align-items: center;">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Xorazm viloyati Tuproqqal'a tumani</span>
+                            </div>
+                        </div>
+                        <div class="social-links">
+                            <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form onsubmit="handleContact(event)">
+                            <div class="form-group">
+                                <input type="text" id="cName" placeholder=" " required>
+                                <label for="cName">Ismingiz</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="cEmail" placeholder=" " required>
+                                <label for="cEmail">Email manzilingiz</label>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="cMsg" rows="4" placeholder=" " required></textarea>
+                                <label for="cMsg">Xabar matni</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Yuborish</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="footer-logo"><i class="fa-solid fa-shapes" style="color: var(--primary);"></i> LEARN UP</a>
+                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">Bilim — bu eng kuchli qurol. Biz bilan birgalikda o'zingiz va jamiyat uchun foydali bo'ling.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px;">Kompaniya</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Biz haqimizda</a></li>
+                        <li><a href="#">Kurslar</a></li>
+                        <li><a href="#">Ustozlar</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 20px;">Yordam</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Qoidalar</a></li>
+                        <li><a href="#">Maxfiylik</a></li>
+                        <li><a href="#">Aloqa</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border); font-size: 14px; color: var(--text-muted);">
+                &copy; 2026 ILM BILAN. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h3 style="margin-bottom: 20px;">Tizimga kirish</h3>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="text" id="loginEmail" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Email yoki Login</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPass" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Parol</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Kirish</button>
+                <div class="modal-links">
+                    <a onclick="switchModal('loginModal', 'forgotPasswordModal')">Parolni unutdingizmi?</a>
+                </div>
+                <p style="margin-top: 15px; text-align: center; font-size: 14px;">Hisobingiz yo'qmi? <a onclick="switchModal('loginModal', 'registerModal')" style="color: var(--primary); cursor: pointer;">Ro'yxatdan o'ting</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <h3 style="margin-bottom: 20px;">Ro'yxatdan o'tish</h3>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <input type="text" id="regName" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Ismingiz</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPass" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Parol</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Yaratish</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('forgotPasswordModal')">&times;</span>
+            <h3 style="margin-bottom: 20px;">Parolni tiklash</h3>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Email manzilingizni kiriting. Parolingizni tiklash bo'yicha ko'rsatma yuboramiz.</p>
+            <form onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <input type="email" id="forgotEmail" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Email manzilingiz</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Yuborish</button>
+            </form>
+            <div class="modal-links" style="margin-top: 15px;">
+                <a onclick="switchModal('forgotPasswordModal', 'loginModal')">Kirishga qaytish</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL (NEW) -->
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('editProfileModal')">&times;</span>
+            <h3 style="margin-bottom: 20px;">Profilni tahrirlash</h3>
+            <form onsubmit="handleEditProfile(event)">
+                <div class="form-group">
+                    <input type="text" id="editName" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Ism</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="editEmail" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="url" id="editAvatar" placeholder=" " >
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Rasm URL (ixtiyoriy)</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Saqlash</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHANGE PASSWORD MODAL -->
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal('changePasswordModal')">&times;</span>
+            <h3 style="margin-bottom: 20px;">Parolni o'zgartirish</h3>
+            <form onsubmit="handleChangePassword(event)">
+                <div class="form-group">
+                    <input type="password" id="newPass" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Yangi parol</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="confirmPass" placeholder=" " required>
+                    <label style="top: -10px; left: 10px; font-size: 12px; background: var(--bg-card); padding: 0 5px; color: var(--primary);">Yangi parolni tasdiqlash</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">O'zgartirish</button>
+            </form>
+        </div>
+    </div>
+<script src="web.js"></script>
+</body>
+</html>
